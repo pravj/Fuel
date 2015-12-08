@@ -5,8 +5,10 @@ import json
 mail_url = 'https://maps.googleapis.com/maps/api/geocode/json'
 payload = {'key': 'AIzaSyALZxIeLuy3sTgiRO8ztoZqHho9Jc3zQwc', 'components': 'country:IN', 'address': ''}
 
+# count of places in a state
+state_place_count = {}
 # count of orders in a state
-state_count = {}
+state_order_count = {}
 
 # in-memory cache to reduce the network calls
 place_visited = {}
@@ -33,7 +35,8 @@ for place in places:
 	# place already known
 	try:
 		_state = place_visited[address_string]
-		state_count[_state] += 1
+		state_place_count[_state] += 1
+		state_order_count[_state] += place['reduction']
 	except Exception, e:
 		payload['address'] = address_string
 
@@ -49,13 +52,19 @@ for place in places:
 
 				try:
 					# same state present, because of a different address in the state
-					state_count[_state] += 1
+					state_place_count[_state] += 1
+					state_order_count[_state] += place['reduction']
 				except Exception, e:
-					state_count[_state] = 0
+					state_place_count[_state] = 0
+					state_order_count[_state] = 0
 				finally:
 					place_visited[address_string] = _state
 					break
 
-# save the collection
+# save the collection of places
 with open('state_place_count.json', 'w') as f:
-	json.dump(state_count, f)
+	json.dump(state_place_count, f)
+
+# save the collection of orders
+with open('state_order_count.json', 'w') as f:
+	json.dump(state_order_count, f)
