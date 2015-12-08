@@ -57,5 +57,5 @@ for place in places:
 					break
 
 # save the collection
-with open('state_count.json', 'w') as f:
+with open('state_place_count.json', 'w') as f:
 	json.dump(state_count, f)
