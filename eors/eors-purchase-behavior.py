@@ -1,7 +1,14 @@
+import json
 import plotly.plotly as py
 import plotly.graph_objs as go
 from datetime import datetime, timedelta
-import json
+
+"""
+r.db('message_archive').table('message_store')
+	.filter(r.row('orderMonth').eq('Jul').and(r.row('orderDay').eq('17')).or(r.row('orderDay').eq('18')).or(r.row('orderDay').eq('19')).or(r.row('orderDay').eq('20')).or(r.row('orderDay').eq('21')))
+	.group('orderHour', 'orderDay', 'orderMeridiem')
+	.count()
+"""
 
 # format a hour's int value according to its meridiem
 def format_hour(hour, meridiem):
@@ -31,11 +38,12 @@ for order in order_data:
 
 	z[index] = order['reduction']
 
+
 data = [
     go.Heatmap(
         z=[z],
         x=time_list,
-        y=['Morning'],
+        y=['Order Density'],
         colorscale='Viridis'
     )
 ]

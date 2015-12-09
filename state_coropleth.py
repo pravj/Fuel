@@ -14,6 +14,9 @@ for state in geojson_data['features']:
 		state['properties'] = {'name': state_name, 'density': order_data[state_name]}
 	except Exception, e:
 		state['properties'] = {'name': state_name, 'density': 0}
+		
+		if state_name == 'Uttarakhand':
+			state['properties'] = {'name': state_name, 'density': 75}
 
 with open('maps/india_states_1.geojson', 'w') as f:
 	json.dump(geojson_data, f)
